@@ -4,11 +4,10 @@ from pbh import *
 
 M_vals = np.logspace(0, 5, 220)
 z_vals = np.logspace(2, 5, 120)
-sc_masses = [10, 1e3, 1e5]
+fig_masses = [10, 1e3, 1e5]
 
 
 def clean_L(Lval, Lmin, Lmax):
-    if not np.isfinite(Lval): return Lmax
     if Lval <= 0: return Lmin
     if Lval >= Lmax: return Lmax
     return Lval
@@ -18,10 +17,11 @@ def luminosity_error(M, L_guess, z, mode):
     Ledd = L_Edd(M); Lmin, Lmax = 1e-30 * Ledd, 0.999 * Ledd
     L_guess = clean_L(L_guess, Lmin, Lmax)
     M_eff = M * (1 - L_guess / Ledd)
-    if not np.isfinite(M_eff) or M_eff <= 0: M_eff = 1e-30 * M
+    if M_eff <= 0:
+        M_eff = 1e-30 * M
     L_new = clean_L(L(M_eff, z, mode, 0), Lmin, Lmax)
     residual = (L_new - L_guess) / Ledd
-    return L_new, np.inf if not np.isfinite(residual) else residual, M_eff
+    return L_new, residual, M_eff
 
 
 def luminosity_iteration(M, z, mode, L_initial=None):
@@ -56,7 +56,7 @@ def solve_Meff_curve(z, mode, M_grid=None):
     return {"M": M_grid, "M_eff": np.array(M_eff), "M_eff_over_M": np.array(M_eff_over_M)}
 
 
-def plot_luminosity_vs_z(masses=sc_masses):
+def plot_luminosity_vs_z(masses=fig_masses):
     plt.figure(figsize=(7.5, 5.2))
     for M in masses:
         coll, photo = solve_redshift_curve(M, "collisional"), solve_redshift_curve(M, "photoionization")
@@ -77,7 +77,10 @@ def plot_Meff_ratio_vs_z(masses=mass_labels.keys()):
 
 
 def main():
-    plot_luminosity_vs_z(); plot_Meff_ratio_vs_z(); plt.show()
+    plot_luminosity_vs_z()
+    plot_Meff_ratio_vs_z()
+    plt.show()
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()

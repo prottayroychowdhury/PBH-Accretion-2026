@@ -52,7 +52,12 @@ def figure9():
 
 
 def main():
-    figure6(); figure7(); figure8(); figure9(); plt.show()
+    figure6()
+    figure7()
+    figure8()
+    figure9()
+    plt.show()
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()
