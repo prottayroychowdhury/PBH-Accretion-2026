@@ -20,8 +20,6 @@ def luminosity_error(M, L_guess, z, mode):
     Lmin, Lmax = 1e-30 * Ledd, 0.999 * Ledd
     L_guess = clean_L(L_guess, Lmin, Lmax)
     M_eff = M * (1 - L_guess / Ledd)
-    if M_eff <= 0:
-        M_eff = 1e-30 * M
     L_new = clean_L(L(M_eff, z, mode, 0), Lmin, Lmax)
     residual = (L_new - L_guess) / Ledd
     return L_new, residual, M_eff
