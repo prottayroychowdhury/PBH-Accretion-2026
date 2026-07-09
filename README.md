@@ -31,10 +31,3 @@ python self_consistent.py
 python expansion_check.py
 python main.py
 ```
-
-## Use in a new script
-
-```python
-from pbh import *
-from self_consistent import solve_redshift_curve
-```
